@@ -11,9 +11,8 @@ export const types={
  shirt:{name:'shirt',category:'topwear',fabrics:['Cotton','Linen','Blend'],fits:['Regular','Slim','Relaxed'],desc:['Oxford','Formal','Casual','Striped','Checked','Printed','Textured','Poplin'],price:[899,2799],tags:'shirt formal casual'},
  tshirt:{name:'t-shirt',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed','Slim'],desc:['Crew-neck','Graphic','Plain','Pocket','Oversized','Ribbed'],price:[399,1499],tags:'tshirt tee top'},
  polo:{name:'polo t-shirt',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim'],desc:['Classic','Pique','Striped','Contrast-collar'],price:[599,1799],tags:'polo tshirt tee collar'},
- hoodie:{name:'hoodie',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed'],desc:['Zip-up','Pullover','Fleece-lined','Logo','Plain'],price:[999,2999],tags:'hoodie winter'},
+ hoodie:{name:'hoodie',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed'],desc:['Zip-up','Classic','Fleece-lined','Logo','Plain','Graphic'],price:[999,2999],tags:'hoodie winter'},
  jacket:{name:'jacket',category:'topwear',fabrics:['Blend','Denim','Cotton'],fits:['Regular','Slim','Relaxed'],desc:['Bomber','Denim','Light','Quilted','Windcheater','Utility'],price:[1799,4999],tags:'jacket outerwear'},
- kurta:{name:'kurta',category:'topwear',fabrics:['Cotton','Linen','Blend'],fits:['Regular','Relaxed','Straight'],desc:['Short','Straight','Mandarin-collar','Printed','Plain'],price:[799,2499],tags:'kurta ethnic'},
  jeans:{name:'jeans',category:'bottomwear',fabrics:['Denim'],fits:['Slim','Straight','Relaxed','Regular'],desc:['Mid-rise','Stretch','Tapered','Washed','Distressed','Classic'],price:[1299,3499],tags:'jeans denim pants'},
  trousers:{name:'trousers',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim','Straight'],desc:['Formal','Pleated','Flat-front','Smart','Stretch'],price:[999,2999],tags:'trousers pants formal'},
  chinos:{name:'chinos',category:'bottomwear',fabrics:['Cotton'],fits:['Slim','Regular','Straight'],desc:['Stretch','Tapered','Classic','Washed'],price:[999,2499],tags:'chinos trousers pants'},
@@ -31,10 +30,11 @@ const sizesOf={topwear:['S','M','L','XL','XXL'],bottomwear:['28','30','32','34',
 
 // brand -> product types sold, and a price tier multiplier
 const brands={
- 'Max':{menu:['shirt','tshirt','polo','hoodie','jacket','jeans','trousers','chinos','shorts','joggers','sneakers','sandals','flipflops','kurta'],tier:0.85},
+ 'Max':{menu:['shirt','tshirt','polo','hoodie','jacket','jeans','trousers','chinos','shorts','joggers','sneakers','sandals','flipflops'],tier:0.85},
  'Westside':{menu:ALL,tier:1},
  'Levi’s':{menu:['shirt','tshirt','jacket','jeans','shorts','hoodie'],tier:1.3},
- 'Go Colours':{menu:['leggings','skirt','trousers','joggers','tshirt','kurta'],tier:0.8},
+ 'Go Colours':{menu:['leggings','skirt','trousers','joggers','tshirt'],tier:0.8},
+ 'Zudio':{menu:['tshirt','shirt','jeans','trousers','shorts','joggers','hoodie','jacket','skirt','sneakers','leggings','chinos'],tier:0.55},
  'H&M':{menu:['tshirt','hoodie','shirt','jeans','chinos','shorts','jacket','sneakers','joggers'],tier:1},
  'Zara':{menu:['shirt','jacket','trousers','chinos','jeans','sneakers','formalshoes','hoodie','tshirt'],tier:1.6},
  'Pantaloons':{menu:ALL,tier:0.9},
@@ -55,6 +55,7 @@ const brands={
 // Extra stores. Existing stores (in data.js) are kept; these add depth, mostly near Panjim so the default 2 km search finds plenty.
 const A={Panjim:[15.4909,73.8278],Mapusa:[15.5915,73.8089],Porvorim:[15.5262,73.8176],Calangute:[15.5440,73.7550],Margao:[15.2736,73.9581],Vasco:[15.3960,73.8110],Ponda:[15.4025,74.0150]};
 const extra=[
+ ['Levi’s','Panjim',0.008,-0.005],['Max','Panjim',-0.006,0.007],['Zudio','Panjim',0.005,0.004],['Zudio','Panjim',-0.008,-0.006],['Westside','Panjim',0.01,0.006],['Go Colours','Panjim',-0.009,0.005],['Zudio','Mapusa',0.002,-0.005],['Zudio','Porvorim',-0.002,0.005],['Zudio','Calangute',0.001,-0.003],['Zudio','Margao',-0.001,0.006],['Levi’s','Calangute',-0.001,0.006],
  ['Pantaloons','Panjim',0.004,-0.006],['Lifestyle','Panjim',-0.007,0.004],['Allen Solly','Panjim',0.009,0.003],['Van Heusen','Panjim',-0.004,-0.009],
  ['Puma','Panjim',0.002,0.01],['Bata','Panjim',-0.01,-0.003],['Decathlon','Panjim',0.011,-0.008],['Nike','Panjim',-0.002,0.006],['Adidas','Panjim',0.006,0.007],
  ['Pantaloons','Mapusa',0.003,0.004],['Allen Solly','Mapusa',-0.004,-0.003],['Puma','Mapusa',0.006,-0.004],['Bata','Mapusa',-0.002,0.007],
@@ -68,38 +69,43 @@ const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const hours=['10 AM–9 PM','10 AM–9 PM','10 AM–10 PM','10 AM–8 PM'];
 
 export function buildCatalog({existingStores}){
- const r=rng(20261118);
+ const r=rng(20261119);
  const taken=new Set(existingStores.map(s=>s.id));
- const stores=extra.map(([brand,area,dlat,dlng],i)=>{let id=slug(brand)+'-'+slug(area);if(taken.has(id))id+='-2';taken.add(id);
+ const stores=extra.map(([brand,area,dlat,dlng],i)=>{let id=slug(brand)+'-'+slug(area);if(taken.has(id))id+='-2';while(taken.has(id))id+='x';taken.add(id);
   return {id,brand,area,lat:+(A[area][0]+dlat).toFixed(4),lng:+(A[area][1]+dlng).toFixed(4),hours:hours[i%hours.length],holdHours:i%3===0?[1]:[1,2],response:(i%5===4)?'unable':'arrange'};});
- const products=[],photos={};
  const colourName=c=>c[0].toUpperCase()+c.slice(1);
- const allStores=[...existingStores,...stores];
- for(const st of allStores){
-  const b=brands[st.brand];if(!b)continue;
-  const isNew=stores.includes(st);
-  // existing stores get a fuller rack too; new stores get a full range
-  const target=isNew?16+Math.floor(r()*6):10+Math.floor(r()*5);
-  const seen=new Set(),typeCount=new Map();
-  let guard=0;
-  while(seen.size<target&&guard++<300){
-   const t=pick(r,b.menu),T=types[t];
-   const pool=photoPool[t]||{};const cols=Object.keys(pool);if(!cols.length)continue;
-   const colour=pick(r,cols);const key=t+'|'+colour;if(seen.has(key))continue;
-   const n=typeCount.get(t)||0;typeCount.set(t,n+1);seen.add(key);
-   const fabric=pick(r,T.fabrics);
-   const desc=T.desc[(n+Math.floor(r()*T.desc.length))%T.desc.length];
-   const fit=pick(r,T.fits);
-   const base=T.price[0]+r()*(T.price[1]-T.price[0]);
-   const price=Math.max(299,Math.round(base*b.tier/100)*100-1);
-   const was=r()<0.25?Math.round(price*(1.15+r()*0.3)/100)*100-1:undefined;
-   const id=[st.id,t,colour].join('-');
-   const stock=Object.fromEntries(sizesOf[T.category].map(sz=>{const x=r();const q=x<0.22?0:x<0.45?1+Math.floor(r()*2):2+Math.floor(r()*5);return [sz,q];}));
-   const p={id,storeId:st.id,category:T.category,name:colourName(colour)+' '+(/^(Oxford|Derby)$/.test(desc)?desc:desc.toLowerCase())+' '+T.name,colour:colourName(colour),fit,price,stock,tags:T.tags,generated:true};
-   if(fabric)p.fabric=fabric;if(was&&was>price)p.was=was;
-   products.push(p);
-   const files=pool[colour];photos[id]=files[Math.floor(r()*files.length)];
+ // 1. One catalogue per BRAND. Every branch of that brand carries all of it (only the per-size stock differs).
+ const brandItems={};
+ for(const [brand,b] of Object.entries(brands)){
+  const items=[];const rb=rng(hash(brand));
+  for(const t of b.menu){const T=types[t];const pool=photoPool[t];if(!pool)continue;
+   const options=[];for(const [c,files] of Object.entries(pool))for(const f of files)options.push([c,f]);
+   shuffle(rb,options);
+   const count=Math.min(options.length,t==='sneakers'||t==='shirt'||t==='tshirt'||t==='jeans'?4:3);
+   const usedCol={};
+   for(let k=0;k<count;k++){const [colour,file]=options[k];const nth=usedCol[colour]=(usedCol[colour]||0)+1;
+    const desc=T.desc[(k+Math.floor(rb()*T.desc.length))%T.desc.length];
+    const fabric=pick(rb,T.fabrics),fit=pick(rb,T.fits);
+    const base=T.price[0]+rb()*(T.price[1]-T.price[0]);
+    const price=Math.max(299,Math.round(base*b.tier/100)*100-1);
+    const was=rb()<0.25?Math.round(price*(1.15+rb()*0.3)/100)*100-1:undefined;
+    items.push({key:t+'-'+colour+'-'+nth+'-'+k,t,T,colour,file,name:colourName(colour)+' '+(/^(Oxford|Derby)$/.test(desc)?desc:desc.toLowerCase())+' '+T.name,fabric,fit,price,was});
+   }
+  }
+  brandItems[brand]=items;
+ }
+ // 2. Stock the catalogue in every store of the brand.
+ const products=[],photos={};
+ for(const st of [...existingStores,...stores]){
+  for(const it of (brandItems[st.brand]||[])){
+   const id=st.id+'-'+it.key;
+   const stock=Object.fromEntries(sizesOf[it.T.category].map(sz=>{const x=r();const q=x<0.08?0:x<0.3?1+Math.floor(r()*2):2+Math.floor(r()*5);return [sz,q];}));
+   const p={id,storeId:st.id,category:it.T.category,name:it.name,colour:colourName(it.colour),fit:it.fit,price:it.price,stock,tags:it.T.tags,generated:true};
+   if(it.fabric)p.fabric=it.fabric;if(it.was&&it.was>it.price)p.was=it.was;
+   products.push(p);photos[id]=it.file;
   }
  }
- return {stores,products,photos};
+ return {stores,products,photos,brandItems};
 }
+function hash(s){let h=2166136261;for(const ch of s)h=Math.imul(h^ch.charCodeAt(0),16777619);return h>>>0;}
+function shuffle(r,a){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}

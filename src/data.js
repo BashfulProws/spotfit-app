@@ -1,11 +1,15 @@
 import {buildCatalog} from './catalog.js';
+import {photoPool} from './photo-pool.js';
 // All catalogue records and coordinates below are illustrative demo data, not retailer feeds.
 export const radii=[2,5,10,25,50];
 export const areas = {
   Panjim: {name:'Panjim, Goa', lat:15.4909, lng:73.8278},
   Mapusa: {name:'Mapusa, Goa', lat:15.5915, lng:73.8089},
   Calangute: {name:'Calangute, Goa', lat:15.5440, lng:73.7550},
-  Margao: {name:'Margao, Goa', lat:15.2736, lng:73.9581}
+  Margao: {name:'Margao, Goa', lat:15.2736, lng:73.9581},
+  Porvorim: {name:'Porvorim, Goa', lat:15.5262, lng:73.8176},
+  Vasco: {name:'Vasco da Gama, Goa', lat:15.3960, lng:73.8110},
+  Ponda: {name:'Ponda, Goa', lat:15.4025, lng:74.0150}
 };
 const baseStores = [
  {id:'max-panjim',brand:'Max',area:'Panjim',lat:15.5006,lng:73.8323,hours:'10 AM–9 PM',holdHours:[1,2],response:'arrange'},
@@ -78,21 +82,13 @@ export const figures={topwear:'W07-imgFrame.svg',bottomwear:'W48-imgFrame.svg',f
 // Optional real photos: add a file to app/assets/product-images/ and map the product id to its file name, e.g. {'max-white':'max-white.jpg'}.
 // Products without an entry use the illustrations in the same folder.
 // Photos: images taken from the brands' own websites (Max, Levi's India, Go Colours, Westside), used for a class demonstration only. See docs/ASSETS.md.
+// Original hand-written products get a verified photo of the same item type and colour; generated products carry their own (catalog.js).
+// Photos come from retailer websites and are used for a class demonstration only. See docs/ASSETS.md.
+const baseType=p=>/linen shirt|cotton shirt/i.test(p.name)?'shirt':/trousers/i.test(p.name)?'trousers':/jeans/i.test(p.name)?'jeans':/leggings/i.test(p.name)?'leggings':/trainers|casual shoes/i.test(p.name)?'sneakers':null;
+const baseFallback={};
+for(const p of baseProducts){const t=baseType(p);const files=t&&photoPool[t]&&photoPool[t][p.colour.toLowerCase()];if(files)baseFallback[p.id]='pool/'+files[Math.abs(hashId(p.id))%files.length];}
+function hashId(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return h;}
 export const productPhotos={
- ...Object.fromEntries(Object.entries(built.photos).map(([id,f])=>[id,'pool/'+f])),
- 'max-white':'max-white-shirt.jpg',
- 'por-max-white':'max-white-shirt.jpg',
- 'vasco-max-white':'max-white-shirt.jpg',
- 'margao-max-white':'max-white-shirt.jpg',
- 'max-linen':'max-white-shirt-short.jpg',
- 'mapusa-max-linen':'max-white-shirt-short.jpg',
- 'max-trousers':'max-black-trousers.jpg',
- 'ponda-max-trousers':'max-black-trousers.jpg',
- 'levis-jeans':'levis-jeans.jpg',
- 'por-levis-jeans':'levis-jeans.jpg',
- 'margao-levis-jeans':'levis-jeans.jpg',
- 'go-leggings':'go-leggings.jpg',
- 'cal-go-leggings':'go-leggings.jpg',
- 'west-shoes':'westside-trainers.jpg',
- 'margao-west-shoes':'westside-trainers.jpg'
+ ...baseFallback,
+ ...Object.fromEntries(Object.entries(built.photos).map(([id,f])=>[id,'pool/'+f]))
 };

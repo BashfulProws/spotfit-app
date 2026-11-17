@@ -52,6 +52,10 @@ export function confirmReservation(s,id,{online=true,now=Date.now()}={}){
  const p=products.find(x=>x.id===r.productId);if(availableCount(p,r.size,s,now)<1||p.verified===false){r.status='failed';return r;}
  r.status='confirmed';r.confirmedAt=now;r.expiresAt=now+r.hours*3600000;return r;
 }
+// Pickup finish: the shopper collects the held item and pays at the store. No online payment exists in this prototype.
+export function completeReservation(s,id,{now=Date.now()}={}){const r=s.reservations.find(x=>x.id===id);if(!r)throw Error('Reservation not found.');if(r.status==='collected')return r;if(r.status!=='confirmed'||r.expiresAt<=now)throw Error('Only a confirmed, active hold can be collected.');
+ const p=products.find(x=>x.id===r.productId);const key=p.id+':'+r.size;s.overrides[key]=Math.max(0,(s.overrides[key]??p.stock[r.size]??0)-1);r.status='collected';r.collectedAt=now;r.receipt='SF-'+String(r.code).replace(/\D/g,'')+'-'+String(now).slice(-4);return r;}
+export function rateReservation(s,id,stars,note=''){const r=s.reservations.find(x=>x.id===id);if(!r||r.status!=='collected')throw Error('Rate a collected reservation.');const n=Number(stars);if(!Number.isInteger(n)||n<1||n>5)throw Error('Choose 1 to 5 stars.');if(String(note).length>500)throw Error('Keep the note under 500 characters.');r.rating=n;r.ratingNote=String(note).trim();return r;}
 export function cancelReservation(s,id){const r=s.reservations.find(x=>x.id===id);if(!r)throw Error('Reservation not found.');if(r.status==='pending'||r.status==='confirmed')r.status='cancelled';return r;}
 export function expireReservations(s,now=Date.now()){for(const r of s.reservations)if(r.status==='confirmed'&&r.expiresAt<=now)r.status='expired';}
 export function createRequest(s,{productId,size,message,name,phone,kind='size'}){
@@ -59,7 +63,15 @@ export function createRequest(s,{productId,size,message,name,phone,kind='size'})
  if(!String(message).trim()||message.length>1000)throw Error('Write a message of 1 to 1,000 characters.');if(!String(name).trim()||name.length>50)throw Error('Enter your contact name.');if(!/^\+?[\d\s-]{10,16}$/.test(phone))throw Error('Enter a valid contact number.');
  const r={id:crypto.randomUUID(),kind,productId,size,storeId:p.storeId,name:name.trim(),phone:phone.trim(),createdAt:Date.now(),status:'sent',messages:[{side:'you',text:message.trim(),at:Date.now()}]};s.requests.unshift(r);s.activeRequestId=r.id;return r;
 }
-export function demoReply(s,id,scenario){const r=s.requests.find(x=>x.id===id);if(!r)throw Error('Request not found.');const replies={arrange:`We can arrange ${r.size} in about 2 hours. We will confirm when it is ready.`,branch:`We cannot arrange ${r.size} here. Our Mapusa branch may have it. Contact them to check.`,unable:`Sorry, we cannot arrange ${r.size}. Please check a different store.`,ready:`Your requested size ${r.size} is now available in this demo. Request a hold before leaving.`};if(!replies[scenario])throw Error('Unknown demo response.');r.status=scenario;r.messages.push({side:'store',text:replies[scenario],at:Date.now()});if(scenario==='ready')s.overrides[r.productId+':'+r.size]=3;return r;}
+// Nearest other branch of the same brand that carries the same item (same name, colour, category), preferring one with the size in stock.
+export function suggestBranch(s,r){
+ const p=products.find(x=>x.id===r.productId),st=stores.find(x=>x.id===p.storeId);
+ const same=products.filter(x=>x.id!==p.id&&x.storeId!==st.id&&x.name===p.name&&x.colour===p.colour&&x.category===p.category&&stores.find(y=>y.id===x.storeId).brand===st.brand);
+ const scored=same.map(x=>({product:x,store:stores.find(y=>y.id===x.storeId),has:(x.stock[r.size]||0)>0})).map(o=>({...o,d:distanceKm(st,o.store)}));
+ scored.sort((a,b)=>(b.has-a.has)||(a.d-b.d));
+ return scored[0]||null;
+}
+export function demoReply(s,id,scenario){const r=s.requests.find(x=>x.id===id);if(!r)throw Error('Request not found.');const replies={arrange:`We can arrange ${r.size} in about 2 hours. We will confirm when it is ready.`,branch:`We cannot arrange ${r.size} here. Our ${(suggestBranch(s,r)||{store:{area:'nearby'}}).store.area} branch may have it. Contact them to check.`,unable:`Sorry, we cannot arrange ${r.size}. Please check a different store.`,ready:`Your requested size ${r.size} is now available in this demo. Request a hold before leaving.`};if(!replies[scenario])throw Error('Unknown demo response.');r.status=scenario;r.messages.push({side:'store',text:replies[scenario],at:Date.now()});if(scenario==='branch'){const sg=suggestBranch(s,r);r.branchStoreId=sg?sg.store.id:null;r.branchProductId=sg?sg.product.id:null;}if(scenario==='ready')s.overrides[r.productId+':'+r.size]=3;return r;}
 
 /* Map helpers. The map is schematic: it projects sample coordinates into a fixed-size box. */
 export const nextRadius=r=>radii.find(x=>x>r)??null;
