@@ -1,3 +1,4 @@
+import {buildCatalog} from './catalog.js';
 // All catalogue records and coordinates below are illustrative demo data, not retailer feeds.
 export const radii=[2,5,10,25,50];
 export const areas = {
@@ -6,7 +7,7 @@ export const areas = {
   Calangute: {name:'Calangute, Goa', lat:15.5440, lng:73.7550},
   Margao: {name:'Margao, Goa', lat:15.2736, lng:73.9581}
 };
-export const stores = [
+const baseStores = [
  {id:'max-panjim',brand:'Max',area:'Panjim',lat:15.5006,lng:73.8323,hours:'10 AM–9 PM',holdHours:[1,2],response:'arrange'},
  {id:'westside-panjim',brand:'Westside',area:'Panjim',lat:15.4802,lng:73.8395,hours:'10 AM–9 PM',holdHours:[1,2],response:'unable'},
  {id:'levis-panjim',brand:'Levi’s',area:'Panjim',lat:15.4961,lng:73.8369,hours:'10 AM–9 PM',holdHours:[1,2],response:'branch'},
@@ -28,10 +29,11 @@ export const stores = [
  {id:'westside-margao',brand:'Westside',area:'Margao',lat:15.2762,lng:73.961,hours:'10 AM–9 PM',holdHours:[1,2],response:'unable'},
  {id:'levis-margao',brand:'Levi’s',area:'Margao',lat:15.2738,lng:73.9555,hours:'10 AM–9 PM',holdHours:[1,2],response:'branch'}
 ];
+
 export const sizeOptions={topwear:['S','M','L','XL','XXL'],bottomwear:['28','30','32','34','36','38'],footwear:['UK 5','UK 6','UK 7','UK 8','UK 9','UK 10']};
 export const categoryNames={topwear:'Topwear',bottomwear:'Bottomwear',footwear:'Footwear'};
 const stock=(pairs)=>Object.fromEntries(pairs.map(([s,n])=>[s,n]));
-export const products=[
+const baseProducts=[
  {id:'max-white',storeId:'max-panjim',category:'topwear',name:'White cotton shirt',fabric:'Cotton',colour:'White',fit:'Regular',price:1299,stock:stock([['S',3],['M',5],['L',4],['XL',4],['XXL',2]])},
  {id:'west-white',storeId:'westside-panjim',category:'topwear',name:'White cotton shirt',fabric:'Cotton',colour:'White',fit:'Regular',price:1200,was:1500,stock:stock([['S',3],['M',3],['L',3],['XL',1],['XXL',0]])},
  {id:'levis-white',storeId:'levis-panjim',category:'topwear',name:'White cotton shirt',fabric:'Cotton',colour:'White',fit:'Regular',price:1499,stock:stock([['S',2],['M',3],['L',2],['XL',0],['XXL',2]])},
@@ -63,6 +65,9 @@ export const products=[
  {id:'margao-west-shoes',storeId:'westside-margao',category:'footwear',name:'Everyday trainers',colour:'White',fit:'Regular',price:1999,stock:stock([['UK 7',2],['UK 8',3],['UK 9',3]])},
  {id:'margao-levis-jeans',storeId:'levis-margao',category:'bottomwear',name:'Straight-fit jeans',fabric:'Denim',colour:'Blue',fit:'Straight',price:2499,stock:stock([['30',2],['32',2],['34',2]])}
 ];
+const built=buildCatalog({existingStores:baseStores});
+export const stores=[...baseStores,...built.stores];
+export const products=[...baseProducts,...built.products];
 export const demoProfiles=[
  {id:'ashutosh',name:'Ashutosh',sizes:{topwear:'XL',bottomwear:'34',footwear:'UK 9'},measurements:{}},
  {id:'mum',name:'Mum',sizes:{topwear:'M',bottomwear:'30',footwear:'UK 5'},measurements:{}},
@@ -74,6 +79,7 @@ export const figures={topwear:'W07-imgFrame.svg',bottomwear:'W48-imgFrame.svg',f
 // Products without an entry use the illustrations in the same folder.
 // Photos: images taken from the brands' own websites (Max, Levi's India, Go Colours, Westside), used for a class demonstration only. See docs/ASSETS.md.
 export const productPhotos={
+ ...Object.fromEntries(Object.entries(built.photos).map(([id,f])=>[id,'pool/'+f])),
  'max-white':'max-white-shirt.jpg',
  'por-max-white':'max-white-shirt.jpg',
  'vasco-max-white':'max-white-shirt.jpg',

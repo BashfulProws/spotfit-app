@@ -11,12 +11,14 @@ export function availableCount(p,size,s,now=Date.now()){
 export function stockStatus(p,size,s,now=Date.now()){
  if(!size)return 'Choose size';if(p.verified===false)return 'Check with store';const n=availableCount(p,size,s,now);return n===0?'Check with store':n<=2?'Running fast':'Available';
 }
+// Plural-tolerant word match: 'shirts' finds 'shirt', 'jeans' finds 'jean', 't-shirt' and 'tshirt' both work.
+export function termMatches(hay,w){w=w.replace(/[-’']/g,' ').trim();if(!w)return true;const flat=hay.replace(/ /g,'');if(hay.includes(w)||flat.includes(w.replace(/ /g,'')))return true;const stem=w.length>3&&w.endsWith('es')&&!w.endsWith('ses')?w.slice(0,-2):w.length>3&&w.endsWith('s')&&!w.endsWith('ss')?w.slice(0,-1):null;return !!stem&&(hay.includes(stem)||flat.includes(stem));}
 export function searchProducts(s,now=Date.now(),{ignoreRadius=false,includeUnavailable=false}={}){
  const size=selectedSize(s);const words=s.query.toLowerCase().trim().split(/\s+/).filter(Boolean);const f=s.filters;
  return products.filter(p=>{
   const st=stores.find(x=>x.id===p.storeId);
   if(p.category!==s.category||(!ignoreRadius&&distanceKm(s.location,st)>f.radius))return false;
-  if(!words.every(w=>(p.name+' '+p.fabric+' '+st.brand+' '+p.category).toLowerCase().includes(w)))return false;
+  const hay=(p.name+' '+(p.fabric||'')+' '+st.brand+' '+p.category+' '+(p.tags||'')).toLowerCase().replace(/[-’']/g,' ');if(!words.every(w=>termMatches(hay,w)))return false;
   if(f.brand!=='All brands'&&st.brand!==f.brand)return false;
   if(f.colour!=='Any'&&p.colour!==f.colour)return false;
   if(p.category!=='footwear'&&f.fabric!=='Any'&&p.fabric!==f.fabric)return false;
@@ -27,8 +29,10 @@ export function searchProducts(s,now=Date.now(),{ignoreRadius=false,includeUnava
   if(f.availability==='Running fast'&&status!=='Running fast')return false;
   if(f.availability==='Check with store'&&status!=='Check with store')return false;
   return true;
- }).sort((a,b)=>distanceKm(s.location,stores.find(x=>x.id===a.storeId))-distanceKm(s.location,stores.find(x=>x.id===b.storeId)));
+ }).sort((a,b)=>relevance(b,words)-relevance(a,words)||distanceKm(s.location,stores.find(x=>x.id===a.storeId))-distanceKm(s.location,stores.find(x=>x.id===b.storeId)));
 }
+// Whole-word matches in the product name rank first ('shirts' lists shirts before t-shirts), then nearest first.
+function relevance(p,words){const n=p.name.toLowerCase();return words.filter(w=>{const e=w.replace(/[^a-z0-9 ]/g,'').replace(/(es|s)$/,'');return !!e&&new RegExp('(?<![a-z0-9-])'+e+'(es|s)?(?![a-z0-9-])').test(n);}).length;}
 export function nearbyStores(s){return stores.map(st=>({...st,distance:distanceKm(s.location,st)})).filter(st=>st.distance<=s.filters.radius).sort((a,b)=>a.distance-b.distance);}
 export function changeCategory(s,category){if(!sizeOptions[category])throw Error('Unknown category');s.category=category;s.query='';s.filters={...s.filters,fabric:'Any',fit:'Any',colour:'Any',brand:'All brands',availability:'Any status',showUnavailable:false};return s;}
 export function applyProfile(s,id){const p=s.profiles.find(p=>p.id===id);if(!p)throw Error('Profile not found');s.activeProfileId=id;s.sizes={...p.sizes};return s;}
