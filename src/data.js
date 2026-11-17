@@ -1,5 +1,5 @@
-import {buildCatalog} from './catalog.js';
-import {photoPool} from './photo-pool.js';
+import {buildCatalog} from './catalog.js?v=mwl62t0z';
+import {photoPool} from './photo-pool.js?v=mwl62t0z';
 // All catalogue records and coordinates below are illustrative demo data, not retailer feeds.
 export const radii=[2,5,10,25,50];
 export const areas = {

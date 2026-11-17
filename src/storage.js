@@ -1,5 +1,5 @@
-import {initialState,expireReservations} from './domain.js';
-import {demoProfiles} from './data.js';
+import {initialState,expireReservations} from './domain.js?v=mwl62t0z';
+import {demoProfiles} from './data.js?v=mwl62t0z';
 const KEY='spotfit.shopper.v1';
 export function loadState(storage=localStorage){
  const fallback=initialState();

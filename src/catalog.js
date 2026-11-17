@@ -1,7 +1,7 @@
 // Expanded demo catalogue. Everything here is generated, illustrative sample data (stores, prices, stock).
 // It is deterministic: the same seed always gives the same catalogue, so tests and demos are repeatable.
 // Photos come from photo-pool.js (credited in docs/ASSETS.md); items without a matching photo use the illustrations.
-import {photoPool} from './photo-pool.js';
+import {photoPool} from './photo-pool.js?v=mwl62t0z';
 
 function rng(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
 const pick=(r,arr)=>arr[Math.floor(r()*arr.length)];

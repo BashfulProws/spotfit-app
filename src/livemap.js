@@ -1,4 +1,4 @@
-import {brandLogos} from './brand-logos.js';
+import {brandLogos} from './brand-logos.js?v=mwl62t0z';
 // Real street map (Leaflet + OpenStreetMap tiles). One map instance is kept alive between
 // screen renders, so zoom and radius changes animate smoothly instead of redrawing.
 // If Leaflet or the network is missing, app.js falls back to the schematic panel.

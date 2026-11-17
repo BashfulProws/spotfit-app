@@ -1,4 +1,4 @@
-import {products,stores,sizeOptions,areas,demoProfiles,radii} from './data.js';
+import {products,stores,sizeOptions,areas,demoProfiles,radii} from './data.js?v=mwl62t0z';
 export const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n);
 export const initialState=()=>({version:1,location:{...areas.Panjim},category:'topwear',query:'',sizes:{topwear:null,bottomwear:null,footwear:null},activeProfileId:null,profiles:structuredClone(demoProfiles),filters:{radius:2,fabric:'Any',brand:'All brands',colour:'Any',fit:'Any',availability:'Any status',showUnavailable:false,allGenders:false},selectedProductId:'max-white',selectedStoreId:'max-panjim',holdHours:1,reservations:[],requests:[],activeRequestId:null,activeReservationId:null,overrides:{},signedIn:false,signedInAs:null,onboarded:false});
 export function distanceKm(a,b){const r=x=>x*Math.PI/180;const dlat=r(b.lat-a.lat),dlng=r(b.lng-a.lng);const h=Math.sin(dlat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dlng/2)**2;return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));}
@@ -20,7 +20,7 @@ function tokensOf(p,st){let set=tokenCache.get(p.id);if(set)return set;set=new S
  const raw=(p.name+' '+(p.fabric||'')+' '+st.brand+' '+p.category+' '+(p.tags||'')+' '+p.colour+' '+(GENDER_WORDS[p.gender]||'')).toLowerCase().replace(/[’']/g,'');
  for(const t of raw.split(/[^a-z0-9&-]+/)){if(!t)continue;set.add(t);set.add(sing(t));const flat=t.replace(/[^a-z0-9]/g,'');if(flat)set.add(flat);if(t.includes('-')){const parts=t.split('-');if(parts.every(x=>x.length>1))parts.forEach(x=>{set.add(x);set.add(sing(x));});}}
  tokenCache.set(p.id,set);return set;}
-export function queryWords(q){return String(q||'').toLowerCase().replace(/[’']/g,'').replace(/\bt[\s-]?shirts?\b/g,'tshirt').replace(/\bflip[\s-]?flops?\b/g,'flipflops').replace(/\bslippers\b/g,'flipflops').split(/[^a-z0-9&]+/).filter(Boolean);}
+export function queryWords(q){return String(q||'').toLowerCase().replace(/[’']/g,'').replace(/\bt[\s-]?shirts?\b/g,'tshirt').replace(/\bflip[\s-]?flops?\b/g,'flipflops').replace(/\bslippers\b/g,'flipflops').replace(/\b(sweatshirts?|pullovers?|sweaters?|jumpers?)\b/g,'hoodie').split(/[^a-z0-9&]+/).filter(Boolean);}
 // Whole-word matching (plural tolerant, colour synonyms). 'pants' no longer matches the brand Pantaloons.
 function termMatches(set,w){const alias=COLOUR_ALIAS[w]||COLOUR_ALIAS[sing(w)];if(set.has(w)||set.has(sing(w))||(alias&&set.has(alias)))return true;if(w.length>=5)for(const t of set)if(t.startsWith(w))return true;return false;}
 export const genderLabels={male:'Male',female:'Female'};

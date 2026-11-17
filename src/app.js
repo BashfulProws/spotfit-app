@@ -1,7 +1,7 @@
-import {areas,stores,products,sizeOptions,categoryNames,figures,radii,productPhotos} from './data.js';
-import {bestCategory,genderLabels,profileGender,money,initialState,selectedSize,distanceKm,nearbyStores,searchProducts,availableCount,stockStatus,changeCategory,applyProfile,saveProfile,deleteProfile,toCm,fromCm,requestReservation,confirmReservation,completeReservation,rateReservation,cancelReservation,expireReservations,createRequest,demoReply,nextRadius,prevRadius,projectToMap,visibleMapStores,clusterPins,fitZoom} from './domain.js';
-import {loadState,saveState,clearState} from './storage.js';
-import {livePanel,liveMapAvailable,liveMapBegin,liveMapEnd} from './livemap.js';
+import {areas,stores,products,sizeOptions,categoryNames,figures,radii,productPhotos} from './data.js?v=mwl62t0z';
+import {bestCategory,genderLabels,profileGender,money,initialState,selectedSize,distanceKm,nearbyStores,searchProducts,availableCount,stockStatus,changeCategory,applyProfile,saveProfile,deleteProfile,toCm,fromCm,requestReservation,confirmReservation,completeReservation,rateReservation,cancelReservation,expireReservations,createRequest,demoReply,nextRadius,prevRadius,projectToMap,visibleMapStores,clusterPins,fitZoom} from './domain.js?v=mwl62t0z';
+import {loadState,saveState,clearState} from './storage.js?v=mwl62t0z';
+import {livePanel,liveMapAvailable,liveMapBegin,liveMapEnd} from './livemap.js?v=mwl62t0z';
 
 let state=loadState();
 const ui={draft:null,editCategory:'topwear',unit:'in',shoeSystem:'UK',requestType:'size',areaQuery:'',searchQuery:state.query,contactName:'',phone:'',message:'',code:'',holdHours:1,activityTab:'Reservations',guideReturn:'product',sizeReturn:'results',brandReturn:'filters',profileReturn:'profile-editor',mapZoom:null,mapCentre:null};
