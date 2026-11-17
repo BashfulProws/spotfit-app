@@ -12,7 +12,17 @@ export function stockStatus(p,size,s,now=Date.now()){
  if(!size)return 'Choose size';if(p.verified===false)return 'Check with store';const n=availableCount(p,size,s,now);return n===0?'Check with store':n<=2?'Running fast':'Available';
 }
 // Plural-tolerant word match: 'shirts' finds 'shirt', 'jeans' finds 'jean', 't-shirt' and 'tshirt' both work.
-export function termMatches(hay,w){w=w.replace(/[-’']/g,' ').trim();if(!w)return true;const flat=hay.replace(/ /g,'');if(hay.includes(w)||flat.includes(w.replace(/ /g,'')))return true;const stem=w.length>3&&w.endsWith('es')&&!w.endsWith('ses')?w.slice(0,-2):w.length>3&&w.endsWith('s')&&!w.endsWith('ss')?w.slice(0,-1):null;return !!stem&&(hay.includes(stem)||flat.includes(stem));}
+export const GENDER_WORDS={men:'men mens man male boys',women:'women womens woman female ladies girls',unisex:'men women unisex'};
+const COLOUR_ALIAS={gray:'grey',navy:'blue',cream:'white',ivory:'white',khaki:'beige',tan:'brown',olive:'green',charcoal:'grey'};
+const sing=w=>w.length>3&&w.endsWith('ies')?w.slice(0,-3)+'y':w.length>3&&/(ch|sh|ss|x|z)es$/.test(w)?w.slice(0,-2):w.length>3&&w.endsWith('s')&&!w.endsWith('ss')?w.slice(0,-1):w;
+const tokenCache=new Map();
+function tokensOf(p,st){let set=tokenCache.get(p.id);if(set)return set;set=new Set();
+ const raw=(p.name+' '+(p.fabric||'')+' '+st.brand+' '+p.category+' '+(p.tags||'')+' '+p.colour+' '+(GENDER_WORDS[p.gender]||'')).toLowerCase().replace(/[’']/g,'');
+ for(const t of raw.split(/[^a-z0-9&-]+/)){if(!t)continue;set.add(t);set.add(sing(t));const flat=t.replace(/[^a-z0-9]/g,'');if(flat)set.add(flat);if(t.includes('-')){const parts=t.split('-');if(parts.every(x=>x.length>1))parts.forEach(x=>{set.add(x);set.add(sing(x));});}}
+ tokenCache.set(p.id,set);return set;}
+export function queryWords(q){return String(q||'').toLowerCase().replace(/[’']/g,'').replace(/\bt[\s-]?shirts?\b/g,'tshirt').replace(/\bflip[\s-]?flops?\b/g,'flipflops').replace(/\bslippers\b/g,'flipflops').split(/[^a-z0-9&]+/).filter(Boolean);}
+// Whole-word matching (plural tolerant, colour synonyms). 'pants' no longer matches the brand Pantaloons.
+function termMatches(set,w){const alias=COLOUR_ALIAS[w]||COLOUR_ALIAS[sing(w)];if(set.has(w)||set.has(sing(w))||(alias&&set.has(alias)))return true;if(w.length>=5)for(const t of set)if(t.startsWith(w))return true;return false;}
 export const genderLabels={male:'Male',female:'Female'};
 const genderFits={male:['men','unisex'],female:['women','unisex']};
 export const profileGender=s=>s.profiles.find(p=>p.id===s.activeProfileId)?.gender||null;
@@ -25,11 +35,11 @@ export function searchProducts(s,now=Date.now(),opts={}){
  const all=searchAll(s,now,opts);all.genderFallback=all.length>0;return all;
 }
 function searchAll(s,now,{ignoreRadius=false,includeUnavailable=false}){
- const size=selectedSize(s);const words=s.query.toLowerCase().trim().split(/\s+/).filter(Boolean);const f=s.filters;
+ const size=selectedSize(s);const words=queryWords(s.query);const f=s.filters;
  return products.filter(p=>{
   const st=stores.find(x=>x.id===p.storeId);
   if(p.category!==s.category||(!ignoreRadius&&distanceKm(s.location,st)>f.radius))return false;
-  const hay=(p.name+' '+(p.fabric||'')+' '+st.brand+' '+p.category+' '+(p.tags||'')).toLowerCase().replace(/[-’']/g,' ');if(!words.every(w=>termMatches(hay,w)))return false;
+  const set=tokensOf(p,st);if(!words.every(w=>termMatches(set,w)))return false;
   if(f.brand!=='All brands'&&st.brand!==f.brand)return false;
   if(f.colour!=='Any'&&p.colour!==f.colour)return false;
   if(p.category!=='footwear'&&f.fabric!=='Any'&&p.fabric!==f.fabric)return false;
@@ -91,3 +101,5 @@ export function projectToMap(centre,zoomKm,point,halfBoxPx=125){const kx=111.32*
 export function visibleMapStores(s,centre,zoomKm,box={halfW:150,halfH:105}){return stores.map(st=>({...st,distance:distanceKm(s.location,st),...projectToMap(centre,zoomKm,st)})).filter(st=>Math.abs(st.x)<=box.halfW&&Math.abs(st.y)<=box.halfH).sort((a,b)=>a.distance-b.distance);}
 export function clusterPins(items,minGap=40){const groups=[];for(const it of items){const g=groups.find(g=>Math.hypot(g.x-it.x,g.y-it.y)<minGap);if(g){g.items.push(it);g.x=g.items.reduce((a,b)=>a+b.x,0)/g.items.length;g.y=g.items.reduce((a,b)=>a+b.y,0)/g.items.length;}else groups.push({x:it.x,y:it.y,items:[it]});}return groups;}
 export function fitZoom(s,st){const c=s.location,d=Math.max(Math.abs(st.lng-c.lng)*111.32*Math.cos(c.lat*Math.PI/180),Math.abs(st.lat-c.lat)*110.57);return radii.find(z=>d<=z*0.85)??radii.at(-1);}
+// Which category (topwear, bottomwear, footwear) a search belongs to: the one with the most matching items.
+export function bestCategory(s,query){const words=queryWords(query);if(!words.length)return s.category;const count={topwear:0,bottomwear:0,footwear:0};for(const p of products){const st=stores.find(x=>x.id===p.storeId);if(words.every(w=>termMatches(tokensOf(p,st),w)))count[p.category]++;}const best=Object.entries(count).sort((a,b)=>b[1]-a[1])[0];return count[s.category]>0&&count[s.category]>=best[1]*0.5?s.category:best[1]>0?best[0]:s.category;}

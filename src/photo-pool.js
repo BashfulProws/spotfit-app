@@ -361,5 +361,203 @@ export const photoPool={
    "tshirt_white_2.jpg",
    "tshirt_white_3.jpg"
   ]
+ },
+ "wshirt": {
+  "beige": [
+   "wshirt_beige_0.jpg",
+   "wshirt_beige_1.jpg",
+   "wshirt_beige_2.jpg",
+   "wshirt_beige_3.jpg",
+   "wshirt_beige_4.jpg"
+  ],
+  "black": [
+   "wshirt_black_0.jpg",
+   "wshirt_black_1.jpg",
+   "wshirt_black_2.jpg",
+   "wshirt_black_3.jpg"
+  ],
+  "blue": [
+   "wshirt_blue_0.jpg",
+   "wshirt_blue_1.jpg",
+   "wshirt_blue_2.jpg",
+   "wshirt_blue_3.jpg",
+   "wshirt_blue_4.jpg"
+  ],
+  "green": [
+   "wshirt_green_0.jpg",
+   "wshirt_green_1.jpg",
+   "wshirt_green_2.jpg",
+   "wshirt_green_3.jpg"
+  ],
+  "white": [
+   "wshirt_white_0.jpg",
+   "wshirt_white_1.jpg",
+   "wshirt_white_2.jpg",
+   "wshirt_white_3.jpg",
+   "wshirt_white_4.jpg"
+  ]
+ },
+ "wtshirt": {
+  "beige": [
+   "wtshirt_beige_0.jpg",
+   "wtshirt_beige_1.jpg",
+   "wtshirt_beige_2.jpg"
+  ],
+  "black": [
+   "wtshirt_black_0.jpg",
+   "wtshirt_black_1.jpg"
+  ],
+  "blue": [
+   "wtshirt_blue_0.jpg",
+   "wtshirt_blue_1.jpg",
+   "wtshirt_blue_2.jpg"
+  ],
+  "green": [
+   "wtshirt_green_0.jpg",
+   "wtshirt_green_1.jpg",
+   "wtshirt_green_2.jpg"
+  ],
+  "grey": [
+   "wtshirt_grey_0.jpg"
+  ],
+  "white": [
+   "wtshirt_white_0.jpg",
+   "wtshirt_white_1.jpg",
+   "wtshirt_white_2.jpg",
+   "wtshirt_white_3.jpg"
+  ]
+ },
+ "wjeans": {
+  "beige": [
+   "wjeans_beige_0.jpg"
+  ],
+  "black": [
+   "wjeans_black_0.jpg",
+   "wjeans_black_1.jpg",
+   "wjeans_black_2.jpg",
+   "wjeans_black_3.jpg",
+   "wjeans_black_4.jpg",
+   "wjeans_black_5.jpg"
+  ],
+  "blue": [
+   "wjeans_blue_0.jpg",
+   "wjeans_blue_1.jpg",
+   "wjeans_blue_2.jpg",
+   "wjeans_blue_3.jpg",
+   "wjeans_blue_4.jpg",
+   "wjeans_blue_5.jpg"
+  ],
+  "grey": [
+   "wjeans_grey_0.jpg",
+   "wjeans_grey_1.jpg",
+   "wjeans_grey_2.jpg"
+  ],
+  "white": [
+   "wjeans_white_0.jpg",
+   "wjeans_white_1.jpg",
+   "wjeans_white_2.jpg"
+  ]
+ },
+ "wtrousers": {
+  "beige": [
+   "wtrousers_beige_0.jpg",
+   "wtrousers_beige_1.jpg",
+   "wtrousers_beige_2.jpg",
+   "wtrousers_beige_3.jpg",
+   "wtrousers_beige_4.jpg"
+  ],
+  "black": [
+   "wtrousers_black_0.jpg",
+   "wtrousers_black_1.jpg",
+   "wtrousers_black_2.jpg",
+   "wtrousers_black_3.jpg",
+   "wtrousers_black_4.jpg"
+  ],
+  "blue": [
+   "wtrousers_blue_0.jpg",
+   "wtrousers_blue_1.jpg",
+   "wtrousers_blue_2.jpg",
+   "wtrousers_blue_3.jpg",
+   "wtrousers_blue_4.jpg",
+   "wtrousers_blue_5.jpg"
+  ],
+  "green": [
+   "wtrousers_green_0.jpg",
+   "wtrousers_green_1.jpg",
+   "wtrousers_green_2.jpg",
+   "wtrousers_green_3.jpg",
+   "wtrousers_green_4.jpg"
+  ],
+  "grey": [
+   "wtrousers_grey_0.jpg",
+   "wtrousers_grey_1.jpg",
+   "wtrousers_grey_2.jpg"
+  ],
+  "white": [
+   "wtrousers_white_0.jpg",
+   "wtrousers_white_1.jpg",
+   "wtrousers_white_2.jpg",
+   "wtrousers_white_3.jpg",
+   "wtrousers_white_4.jpg",
+   "wtrousers_white_5.jpg"
+  ]
+ },
+ "wjacket": {
+  "beige": [
+   "wjacket_beige_0.jpg",
+   "wjacket_beige_1.jpg",
+   "wjacket_beige_2.jpg",
+   "wjacket_beige_3.jpg",
+   "wjacket_beige_4.jpg"
+  ],
+  "black": [
+   "wjacket_black_0.jpg",
+   "wjacket_black_1.jpg",
+   "wjacket_black_2.jpg",
+   "wjacket_black_3.jpg",
+   "wjacket_black_4.jpg"
+  ],
+  "blue": [
+   "wjacket_blue_0.jpg",
+   "wjacket_blue_1.jpg",
+   "wjacket_blue_2.jpg"
+  ],
+  "green": [
+   "wjacket_green_0.jpg",
+   "wjacket_green_1.jpg",
+   "wjacket_green_2.jpg",
+   "wjacket_green_3.jpg"
+  ],
+  "white": [
+   "wjacket_white_0.jpg",
+   "wjacket_white_1.jpg",
+   "wjacket_white_2.jpg",
+   "wjacket_white_3.jpg"
+  ]
+ },
+ "wshorts": {
+  "beige": [
+   "wshorts_beige_0.jpg",
+   "wshorts_beige_1.jpg",
+   "wshorts_beige_2.jpg"
+  ],
+  "black": [
+   "wshorts_black_0.jpg",
+   "wshorts_black_1.jpg"
+  ],
+  "blue": [
+   "wshorts_blue_0.jpg",
+   "wshorts_blue_1.jpg",
+   "wshorts_blue_2.jpg"
+  ],
+  "green": [
+   "wshorts_green_0.jpg"
+  ],
+  "white": [
+   "wshorts_white_0.jpg"
+  ],
+  "grey": [
+   "wshorts_grey_0.jpg"
+  ]
  }
 };

@@ -1,3 +1,4 @@
+import {brandLogos} from './brand-logos.js';
 // Real street map (Leaflet + OpenStreetMap tiles). One map instance is kept alive between
 // screen renders, so zoom and radius changes animate smoothly instead of redrawing.
 // If Leaflet or the network is missing, app.js falls back to the schematic panel.
@@ -27,6 +28,9 @@ function ensure(){
 
 function pinIcon(brand,label,cluster){
   if(cluster)return L.divIcon({className:'lm-icon',iconSize:[44,44],iconAnchor:[22,22],html:'<button type="button" class="map-marker cluster" tabindex="-1" aria-label="'+esc(label)+'">'+esc(cluster)+'</button>'});
+  const lg=brandLogos[brand];
+  if(lg){const w=lg.aspect<=1.2?44:Math.min(104,Math.round(Math.max(60,lg.aspect*22+16)));
+    return L.divIcon({className:'lm-icon',iconSize:[w,44],iconAnchor:[w/2,22],html:'<button type="button" class="map-marker brand-pin logo-pin" style="background:'+lg.bg+';width:'+w+'px" tabindex="-1" aria-label="'+esc(label)+'"><img src="./assets/brand-logos/'+lg.file+'" alt="" draggable="false"></button>'});}
   const [bg,fg]=brandStyle[brand]||['#2548F4','#fff'],m=brandMark(brand);
   return L.divIcon({className:'lm-icon',iconSize:[44,44],iconAnchor:[22,22],html:'<button type="button" class="map-marker brand-pin" style="background:'+bg+';color:'+fg+'" tabindex="-1" aria-label="'+esc(label)+'"><span class="'+(m.length>2?'bp-t':m.length>1?'bp-s':'')+'">'+esc(m)+'</span></button>'});
 }
