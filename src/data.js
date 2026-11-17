@@ -72,10 +72,12 @@ const baseProducts=[
 const built=buildCatalog({existingStores:baseStores});
 export const stores=[...baseStores,...built.stores];
 export const products=[...baseProducts,...built.products];
+// Who an item is cut for: 'men', 'women' or 'unisex'. Used to recommend items to the active profile.
+for(const p of products)p.gender??=/legging|skirt|dress/i.test(p.name)?'women':p.category==='footwear'?'unisex':'men';
 export const demoProfiles=[
- {id:'ashutosh',name:'Ashutosh',sizes:{topwear:'XL',bottomwear:'34',footwear:'UK 9'},measurements:{}},
- {id:'mum',name:'Mum',sizes:{topwear:'M',bottomwear:'30',footwear:'UK 5'},measurements:{}},
- {id:'riya',name:'Riya',sizes:{topwear:'M',bottomwear:'30',footwear:'UK 5'},measurements:{chest:91.44,waist:76.2,insideLeg:71.12,foot:24}}
+ {id:'ashutosh',name:'Ashutosh',gender:'male',sizes:{topwear:'XL',bottomwear:'34',footwear:'UK 9'},measurements:{}},
+ {id:'mum',name:'Mum',gender:'female',sizes:{topwear:'M',bottomwear:'30',footwear:'UK 5'},measurements:{}},
+ {id:'riya',name:'Riya',gender:'female',sizes:{topwear:'M',bottomwear:'30',footwear:'UK 5'},measurements:{chest:91.44,waist:76.2,insideLeg:71.12,foot:24}}
 ];
 export const figures={topwear:'W07-imgFrame.svg',bottomwear:'W48-imgFrame.svg',footwear:'W49-imgFrame.svg'};
 

@@ -9,3 +9,6 @@ All stores, stock, prices and replies are sample data. No payments, no real reta
 ## Image credits
 
 Product photos are taken from retailer and brand websites (Levi's India, Jack & Jones, Wrogn, Powerlook, Bonkers Corner, Red Tape, Blu Orng, Go Colours, Relaxo, Neemans, Paragon, Campus, Off Duty, Rare Rabbit). All rights belong to their owners. Used for a class demonstration only, not for any commercial use.
+
+## Map credits
+Map data © OpenStreetMap contributors. Map library: Leaflet (BSD-2-Clause). Store locations are illustrative sample points.

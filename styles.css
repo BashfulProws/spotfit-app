@@ -12,3 +12,16 @@
 .map-controls{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:2}.map-controls button{width:44px;height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:22px;line-height:1}.map-controls button:disabled{opacity:.4;cursor:default}.map-marker.cluster{background:var(--blue-tint);color:var(--cobalt);border-color:var(--cobalt)}
 .product-art{width:70px;height:88px;object-fit:contain;display:block}.product-art.photo{width:100%;height:100%;object-fit:cover}.hero .product-art{width:auto;height:150px}.hero .product-art.photo{width:100%;height:100%}
 .product-art[src*='shoes-']{height:56px;width:78px}.hero .product-art[src*='shoes-']{height:110px;width:auto}
+.map.live:before,.map.live:after{display:none}
+.livemap{position:absolute!important;inset:0;z-index:0;background:var(--soft);font:inherit}
+.livemap.leaflet-container{font:inherit}
+.livemap .lm-icon{background:none;border:0}
+.livemap .map-marker{position:static;transform:none;cursor:pointer}
+.livemap .map-marker:active{transform:scale(.96)}
+.map-marker.brand-pin{box-shadow:0 2px 6px rgba(23,32,51,.35);padding:0;overflow:hidden}
+.brand-pin span{font-size:17px;font-weight:700;line-height:1;letter-spacing:-.02em;color:inherit}.brand-pin span.bp-s{font-size:14px}.brand-pin span.bp-t{font-size:11px}
+.lm-you{display:block;width:18px;height:18px;border-radius:50%;background:var(--cobalt);border:3px solid #fff;box-shadow:0 0 0 3px rgba(37,72,244,.3)}
+.map.live .map-legend{bottom:24px;z-index:2}.map.live .map-controls{z-index:2}
+.livemap .leaflet-control-attribution{font-size:10px;background:#FFFFFFB3}
+.livemap .leaflet-marker-icon{transition:opacity .25s}
+.livemap .leaflet-tile-pane{filter:saturate(.75)}

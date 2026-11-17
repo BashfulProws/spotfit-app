@@ -1,6 +1,6 @@
 import {products,stores,sizeOptions,areas,demoProfiles,radii} from './data.js';
 export const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n);
-export const initialState=()=>({version:1,location:{...areas.Panjim},category:'topwear',query:'',sizes:{topwear:null,bottomwear:null,footwear:null},activeProfileId:null,profiles:structuredClone(demoProfiles),filters:{radius:2,fabric:'Any',brand:'All brands',colour:'Any',fit:'Any',availability:'Any status',showUnavailable:false},selectedProductId:'max-white',selectedStoreId:'max-panjim',holdHours:1,reservations:[],requests:[],activeRequestId:null,activeReservationId:null,overrides:{},signedIn:false,signedInAs:null,onboarded:false});
+export const initialState=()=>({version:1,location:{...areas.Panjim},category:'topwear',query:'',sizes:{topwear:null,bottomwear:null,footwear:null},activeProfileId:null,profiles:structuredClone(demoProfiles),filters:{radius:2,fabric:'Any',brand:'All brands',colour:'Any',fit:'Any',availability:'Any status',showUnavailable:false,allGenders:false},selectedProductId:'max-white',selectedStoreId:'max-panjim',holdHours:1,reservations:[],requests:[],activeRequestId:null,activeReservationId:null,overrides:{},signedIn:false,signedInAs:null,onboarded:false});
 export function distanceKm(a,b){const r=x=>x*Math.PI/180;const dlat=r(b.lat-a.lat),dlng=r(b.lng-a.lng);const h=Math.sin(dlat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dlng/2)**2;return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));}
 export function selectedSize(s){return s.sizes[s.category]||null;}
 export function availableCount(p,size,s,now=Date.now()){
@@ -13,7 +13,18 @@ export function stockStatus(p,size,s,now=Date.now()){
 }
 // Plural-tolerant word match: 'shirts' finds 'shirt', 'jeans' finds 'jean', 't-shirt' and 'tshirt' both work.
 export function termMatches(hay,w){w=w.replace(/[-’']/g,' ').trim();if(!w)return true;const flat=hay.replace(/ /g,'');if(hay.includes(w)||flat.includes(w.replace(/ /g,'')))return true;const stem=w.length>3&&w.endsWith('es')&&!w.endsWith('ses')?w.slice(0,-2):w.length>3&&w.endsWith('s')&&!w.endsWith('ss')?w.slice(0,-1):null;return !!stem&&(hay.includes(stem)||flat.includes(stem));}
-export function searchProducts(s,now=Date.now(),{ignoreRadius=false,includeUnavailable=false}={}){
+export const genderLabels={male:'Male',female:'Female'};
+const genderFits={male:['men','unisex'],female:['women','unisex']};
+export const profileGender=s=>s.profiles.find(p=>p.id===s.activeProfileId)?.gender||null;
+// Recommends items cut for the active profile's gender (plus unisex). If nothing matches the search, shows everything and flags it.
+export function searchProducts(s,now=Date.now(),opts={}){
+ const g=profileGender(s);
+ if(!g||s.filters.allGenders||opts.allGenders)return searchAll(s,now,opts);
+ const fit=searchAll(s,now,opts).filter(p=>genderFits[g].includes(p.gender));
+ if(fit.length)return fit;
+ const all=searchAll(s,now,opts);all.genderFallback=all.length>0;return all;
+}
+function searchAll(s,now,{ignoreRadius=false,includeUnavailable=false}){
  const size=selectedSize(s);const words=s.query.toLowerCase().trim().split(/\s+/).filter(Boolean);const f=s.filters;
  return products.filter(p=>{
   const st=stores.find(x=>x.id===p.storeId);
@@ -36,7 +47,7 @@ function relevance(p,words){const n=p.name.toLowerCase();return words.filter(w=>
 export function nearbyStores(s){return stores.map(st=>({...st,distance:distanceKm(s.location,st)})).filter(st=>st.distance<=s.filters.radius).sort((a,b)=>a.distance-b.distance);}
 export function changeCategory(s,category){if(!sizeOptions[category])throw Error('Unknown category');s.category=category;s.query='';s.filters={...s.filters,fabric:'Any',fit:'Any',colour:'Any',brand:'All brands',availability:'Any status',showUnavailable:false};return s;}
 export function applyProfile(s,id){const p=s.profiles.find(p=>p.id===id);if(!p)throw Error('Profile not found');s.activeProfileId=id;s.sizes={...p.sizes};return s;}
-export function saveProfile(s,p){const name=String(p.name||'').trim();if(!name||name.length>50)throw Error('Enter a name of 1 to 50 characters.');for(const [k,v] of Object.entries(p.sizes||{}))if(v&&!sizeOptions[k]?.includes(v))throw Error('Select a valid '+k+' size.');for(const v of Object.values(p.measurements||{}))if(v!==null&&(!Number.isFinite(v)||v<=0||v>500))throw Error('Enter a measurement above 0 and no more than 500 cm.');const clean={id:p.id||crypto.randomUUID(),name,sizes:{topwear:null,bottomwear:null,footwear:null,...p.sizes},measurements:{...p.measurements}};const i=s.profiles.findIndex(x=>x.id===clean.id);if(i<0)s.profiles.push(clean);else s.profiles[i]=clean;if(s.activeProfileId===clean.id)s.sizes={...clean.sizes};return clean;}
+export function saveProfile(s,p){const name=String(p.name||'').trim();if(!name||name.length>50)throw Error('Enter a name of 1 to 50 characters.');for(const [k,v] of Object.entries(p.sizes||{}))if(v&&!sizeOptions[k]?.includes(v))throw Error('Select a valid '+k+' size.');for(const v of Object.values(p.measurements||{}))if(v!==null&&(!Number.isFinite(v)||v<=0||v>500))throw Error('Enter a measurement above 0 and no more than 500 cm.');if(p.gender!=null&&!['male','female'].includes(p.gender))throw Error('Select a valid gender.');const clean={id:p.id||crypto.randomUUID(),name,gender:p.gender||null,sizes:{topwear:null,bottomwear:null,footwear:null,...p.sizes},measurements:{...p.measurements}};const i=s.profiles.findIndex(x=>x.id===clean.id);if(i<0)s.profiles.push(clean);else s.profiles[i]=clean;if(s.activeProfileId===clean.id)s.sizes={...clean.sizes};return clean;}
 export function deleteProfile(s,id){s.profiles=s.profiles.filter(p=>p.id!==id);if(s.activeProfileId===id){s.activeProfileId=null;s.sizes={topwear:null,bottomwear:null,footwear:null};}}
 export function toCm(value,unit){if(value===''||value===null)return null;const n=Number(value);if(!Number.isFinite(n)||n<=0)throw Error('Enter a positive measurement.');return unit==='in'?n*2.54:n;}
 export function fromCm(value,unit){if(value===undefined||value===null)return '';return String(Math.round((unit==='in'?value/2.54:value)*100)/100);}
