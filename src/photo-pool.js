@@ -43,7 +43,6 @@ export const photoPool={
    "flipflops_blue_3.jpg"
   ],
   "grey": [
-   "flipflops_grey_0.jpg",
    "flipflops_grey_1.jpg",
    "flipflops_grey_2.jpg"
   ]
@@ -73,14 +72,12 @@ export const photoPool={
    "hoodie_blue_3.jpg"
   ],
   "green": [
-   "hoodie_green_0.jpg",
    "hoodie_green_1.jpg",
    "hoodie_green_3.jpg"
   ],
   "white": [
    "hoodie_white_0.jpg",
    "hoodie_white_10.jpg",
-   "hoodie_white_11.jpg",
    "hoodie_white_12.jpg",
    "hoodie_white_2.jpg"
   ]

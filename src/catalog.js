@@ -8,22 +8,22 @@ const pick=(r,arr)=>arr[Math.floor(r()*arr.length)];
 
 // type -> display name, category, fabrics, fits, name descriptors, price range, search tags
 export const types={
- shirt:{name:'shirt',category:'topwear',fabrics:['Cotton','Linen','Blend'],fits:['Regular','Slim','Relaxed'],desc:['Oxford','Formal','Casual','Striped','Checked','Printed','Textured','Poplin'],price:[899,2799],tags:'shirt formal casual'},
- tshirt:{name:'t-shirt',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed','Slim'],desc:['Crew-neck','Graphic','Plain','Pocket','Oversized','Ribbed'],price:[399,1499],tags:'tshirt tee top'},
- polo:{name:'polo t-shirt',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim'],desc:['Classic','Pique','Striped','Contrast-collar'],price:[599,1799],tags:'polo tshirt tee collar'},
- hoodie:{name:'hoodie',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed'],desc:['Zip-up','Classic','Fleece-lined','Logo','Plain','Graphic'],price:[999,2999],tags:'hoodie winter'},
- jacket:{name:'jacket',category:'topwear',fabrics:['Blend','Denim','Cotton'],fits:['Regular','Slim','Relaxed'],desc:['Bomber','Denim','Light','Quilted','Windcheater','Utility'],price:[1799,4999],tags:'jacket outerwear'},
- jeans:{name:'jeans',category:'bottomwear',fabrics:['Denim'],fits:['Slim','Straight','Relaxed','Regular'],desc:['Mid-rise','Stretch','Tapered','Washed','Distressed','Classic'],price:[1299,3499],tags:'jeans denim pants'},
- trousers:{name:'trousers',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim','Straight'],desc:['Formal','Pleated','Flat-front','Smart','Stretch'],price:[999,2999],tags:'trousers pants formal'},
- chinos:{name:'chinos',category:'bottomwear',fabrics:['Cotton'],fits:['Slim','Regular','Straight'],desc:['Stretch','Tapered','Classic','Washed'],price:[999,2499],tags:'chinos trousers pants'},
- shorts:{name:'shorts',category:'bottomwear',fabrics:['Cotton','Denim','Blend'],fits:['Regular','Relaxed'],desc:['Cargo','Bermuda','Chino','Sports','Denim'],price:[499,1799],tags:'shorts'},
- joggers:{name:'joggers',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim','Relaxed'],desc:['Tapered','Fleece','Track','Zip-pocket'],price:[699,1999],tags:'joggers track pants'},
- leggings:{name:'leggings',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Slim'],desc:['Ankle-length','Cropped','High-waist','Daily wear'],price:[499,1299],tags:'leggings pants'},
- skirt:{name:'skirt',category:'bottomwear',fabrics:['Cotton','Denim','Blend'],fits:['Regular','Relaxed'],desc:['A-line','Midi','Pleated','Wrap'],price:[699,1999],tags:'skirt'},
- sneakers:{name:'sneakers',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Everyday','Retro','Low-top','Court','Running','Slip-on'],price:[1299,5999],tags:'sneakers trainers shoes'},
- formalshoes:{name:'formal shoes',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Lace-up','Derby','Oxford','Slip-on'],price:[1799,4999],tags:'formal shoes derby oxford'},
- sandals:{name:'sandals',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Velcro','Sport','Leather','Open-toe'],price:[699,2299],tags:'sandals'},
- flipflops:{name:'flip-flops',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Comfort','Beach','Slider','Everyday'],price:[299,999],tags:'flip flops slippers sliders'}
+ shirt:{name:'shirt',category:'topwear',fabrics:['Cotton','Linen','Blend'],fits:['Regular','Slim','Relaxed'],desc:['Oxford','Formal','Casual','Poplin','Classic'],price:[899,2799],tags:'shirt formal casual'},
+ tshirt:{name:'t-shirt',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed','Slim'],desc:['Crew-neck','Plain','Oversized','Classic','Everyday'],price:[399,1499],tags:'tshirt tee top'},
+ polo:{name:'polo t-shirt',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim'],desc:['Classic','Pique','Everyday'],price:[599,1799],tags:'polo tshirt tee collar'},
+ hoodie:{name:'hoodie',category:'topwear',fabrics:['Cotton','Blend'],fits:['Regular','Relaxed'],desc:['Classic','Everyday','Oversized','Relaxed'],price:[999,2999],tags:'hoodie winter'},
+ jacket:{name:'jacket',category:'topwear',fabrics:['Blend','Denim','Cotton'],fits:['Regular','Slim','Relaxed'],desc:['Classic','Everyday','Casual','Light'],price:[1799,4999],tags:'jacket outerwear'},
+ jeans:{name:'jeans',category:'bottomwear',fabrics:['Denim'],fits:['Slim','Straight','Relaxed','Regular'],desc:['Classic','Everyday','Mid-rise','Casual'],price:[1299,3499],tags:'jeans denim pants'},
+ trousers:{name:'trousers',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim','Straight'],desc:['Formal','Smart','Classic','Everyday'],price:[999,2999],tags:'trousers pants formal'},
+ chinos:{name:'chinos',category:'bottomwear',fabrics:['Cotton'],fits:['Slim','Regular','Straight'],desc:['Classic','Everyday','Casual'],price:[999,2499],tags:'chinos trousers pants'},
+ shorts:{name:'shorts',category:'bottomwear',fabrics:['Cotton','Denim','Blend'],fits:['Regular','Relaxed'],desc:['Casual','Everyday','Classic'],price:[499,1799],tags:'shorts'},
+ joggers:{name:'joggers',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Regular','Slim','Relaxed'],desc:['Classic','Everyday','Casual'],price:[699,1999],tags:'joggers track pants'},
+ leggings:{name:'leggings',category:'bottomwear',fabrics:['Cotton','Blend'],fits:['Slim'],desc:['Ankle-length','Daily wear','Classic'],price:[499,1299],tags:'leggings pants'},
+ skirt:{name:'skirt',category:'bottomwear',fabrics:['Cotton','Denim','Blend'],fits:['Regular','Relaxed'],desc:['Casual','Classic','Everyday'],price:[699,1999],tags:'skirt'},
+ sneakers:{name:'sneakers',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Everyday','Classic','Casual'],price:[1299,5999],tags:'sneakers trainers shoes'},
+ formalshoes:{name:'formal shoes',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Classic','Formal'],price:[1799,4999],tags:'formal shoes derby oxford'},
+ sandals:{name:'sandals',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Classic','Everyday','Comfort'],price:[699,2299],tags:'sandals'},
+ flipflops:{name:'flip-flops',category:'footwear',fabrics:[undefined],fits:['Regular'],desc:['Comfort','Everyday','Classic'],price:[299,999],tags:'flip flops slippers sliders'}
 };
 const ALL=Object.keys(types);
 const sizesOf={topwear:['S','M','L','XL','XXL'],bottomwear:['28','30','32','34','36','38'],footwear:['UK 5','UK 6','UK 7','UK 8','UK 9','UK 10']};
@@ -89,7 +89,8 @@ export function buildCatalog({existingStores}){
     const base=T.price[0]+rb()*(T.price[1]-T.price[0]);
     const price=Math.max(299,Math.round(base*b.tier/100)*100-1);
     const was=rb()<0.25?Math.round(price*(1.15+rb()*0.3)/100)*100-1:undefined;
-    items.push({key:t+'-'+colour+'-'+nth+'-'+k,t,T,colour,file,name:colourName(colour)+' '+(/^(Oxford|Derby)$/.test(desc)?desc:desc.toLowerCase())+' '+T.name,fabric,fit,price,was});
+    let nm=colourName(colour)+' '+(/^(Oxford|Derby)$/.test(desc)?desc:desc.toLowerCase())+' '+T.name;if(items.some(q=>q.name===nm))nm=colourName(colour)+' '+fit.toLowerCase()+'-fit '+desc.toLowerCase()+' '+T.name;
+    items.push({key:t+'-'+colour+'-'+nth+'-'+k,t,T,colour,file,name:nm,fabric,fit,price,was});
    }
   }
   brandItems[brand]=items;
