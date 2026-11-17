@@ -72,4 +72,21 @@ export const figures={topwear:'W07-imgFrame.svg',bottomwear:'W48-imgFrame.svg',f
 
 // Optional real photos: add a file to app/assets/product-images/ and map the product id to its file name, e.g. {'max-white':'max-white.jpg'}.
 // Products without an entry use the illustrations in the same folder.
-export const productPhotos={};
+// Photos: images taken from the brands' own websites (Max, Levi's India, Go Colours, Westside), used for a class demonstration only. See docs/ASSETS.md.
+export const productPhotos={
+ 'max-white':'max-white-shirt.jpg',
+ 'por-max-white':'max-white-shirt.jpg',
+ 'vasco-max-white':'max-white-shirt.jpg',
+ 'margao-max-white':'max-white-shirt.jpg',
+ 'max-linen':'max-white-shirt-short.jpg',
+ 'mapusa-max-linen':'max-white-shirt-short.jpg',
+ 'max-trousers':'max-black-trousers.jpg',
+ 'ponda-max-trousers':'max-black-trousers.jpg',
+ 'levis-jeans':'levis-jeans.jpg',
+ 'por-levis-jeans':'levis-jeans.jpg',
+ 'margao-levis-jeans':'levis-jeans.jpg',
+ 'go-leggings':'go-leggings.jpg',
+ 'cal-go-leggings':'go-leggings.jpg',
+ 'west-shoes':'westside-trainers.jpg',
+ 'margao-west-shoes':'westside-trainers.jpg'
+};
